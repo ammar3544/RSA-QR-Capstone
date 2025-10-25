@@ -229,6 +229,6 @@ You are free to use, modify, and distribute this project for academic or develop
 
 ---
 
-> ✨ *Developed by Ammar Siraj Ananda & Team — RSA QR Capstone Project (2025)*
+> ✨ *Developed by Ammar Siraj Ananda, Sallaa Fikriyatul 'Arifah, Muhammad Fadhli Rahmansyah — RSA QR Capstone Project (2025)*
 
 ---
