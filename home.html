@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QR Encryptor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #e0e0e0;
+      background:
+        radial-gradient(circle at top left, rgba(10, 25, 47, 0.85), rgba(1, 9, 21, 0.95)),
+        url("{{ url_for('static', filename='codes_background.jpg') }}") center/cover no-repeat fixed;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+    }
+
+    header {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    header img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      padding: 6px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    }
+
+    header h2 {
+      font-size: 1em;
+      font-weight: 400;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: 0.3px;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 50px 60px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 30px rgba(80, 120, 255, 0.25);
+      animation: fadeInUp 1.5s ease-out;
+      max-width: 600px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.4em;
+      background: linear-gradient(90deg, #48c6ef, #6f86d6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 1em;
+      opacity: 0.9;
+      line-height: 1.6em;
+      margin-bottom: 2em;
+    }
+
+    .start-btn {
+      background: linear-gradient(135deg, #48c6ef, #6f86d6);
+      color: white;
+      padding: 14px 38px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.05em;
+      letter-spacing: 0.5px;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(111,134,214,0.4);
+    }
+
+    .start-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(111,134,214,0.6);
+    }
+
+    .start-btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 18px;
+      font-size: 0.85em;
+      opacity: 0.8;
+      color: #9aa0a6;
+      animation: fadeIn 2s ease-in-out;
+      text-align: center;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        top: 15px;
+        left: 15px;
+      }
+
+      header img {
+        width: 45px;
+        height: 45px;
+      }
+
+      header h2 {
+        font-size: 0.9em;
+      }
+
+      .glass-card {
+        width: 90%;
+        padding: 35px 25px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+      }
+
+      p {
+        font-size: 0.9em;
+      }
+
+      .start-btn {
+        padding: 12px 30px;
+        font-size: 1em;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo_unib.png') }}" alt="Logo UNIB" />
+    <h2>Universitas Bengkulu</h2>
+  </header>
+
+  <div class="glass-card">
+    <h1>RSA + QR Hybrid Encryptor</h1>
+    <p>
+      Secure your files using RSA public-private key pairs and<br>
+      QR-based AES key sharing technology.<br>
+      Fast, safe, and futuristic.
+    </p>
+
+    <a href="{{ url_for('login') }}" onclick="return confirm('Ready to login?')">
+      <button class="start-btn">Go to Login</button>
+    </a>
+  </div>
+
+  <footer>© 2025 Secure Encryption System | Developed by Ammar Siraj Ananda, Muhammad Fadli Rahmansyah, Sallaa Fikriyatul Arifah</footer>
+<script src="http://localhost:35729/livereload.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hasil Verifikasi</title>
+</head>
+<body>
+  <h2>Hasil Verifikasi File: {{ results.filename }}</h2>
+  <ul>
+  {% for n in results.notes %}
+    <li>{{ n }}</li>
+  {% endfor %}
+  </ul>
+  <a href="{{ url_for('index') }}">Kembali ke Beranda</a>
+</body>
+</html>

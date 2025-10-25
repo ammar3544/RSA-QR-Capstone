@@ -1,0 +1,8 @@
+<section>
+  <h2>Client Dashboard</h2>
+  <p>Halo <strong>{{ current_user.id }}</strong> 👋. Anda login sebagai <b>Client</b>.</p>
+  <p>Anda bisa mengunggah file untuk dienkripsi. Hasilnya berupa file terenkripsi + QR payload.</p>
+  <form action="{{ url_for('result') }}" method="get">
+    <button type="submit">Lihat Result Contoh</button>
+  </form>
+</section>

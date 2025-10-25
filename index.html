@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RSA + QR Hybrid Encryptor</title>
+  <style>
+    :root {
+      --bg-color: #f7f9fc;
+      --text-color: #333;
+      --card-bg: #fff;
+      --header-bg: #2c3e50;
+      --header-text: #fff;
+      --button-bg: #3498db;
+      --button-bg-hover: #2980b9;
+      --success-bg: #27ae60;
+      --success-bg-hover: #1e8449;
+      --danger-bg: #e74c3c;
+      --danger-bg-hover: #c0392b;
+      --flash-bg: #ffeaa7;
+      --flash-border: #f1c40f;
+    }
+
+    body.dark {
+      --bg-color: #1e272e;
+      --text-color: #ecf0f1;
+      --card-bg: #2f3640;
+      --header-bg: #111;
+      --header-text: #f5f6fa;
+      --button-bg: #0984e3;
+      --button-bg-hover: #74b9ff;
+      --success-bg: #00b894;
+      --success-bg-hover: #55efc4;
+      --danger-bg: #d63031;
+      --danger-bg-hover: #ff7675;
+      --flash-bg: #636e72;
+      --flash-border: #b2bec3;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 20px 30px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    h1 { margin: 0; font-size: 26px; }
+    main { max-width: 900px; margin: 30px auto; padding: 0 15px; }
+    section {
+      background: var(--card-bg);
+      margin-bottom: 25px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      transition: background 0.3s;
+    }
+    h3 { margin-top: 0; color: var(--text-color); }
+    label { display: block; margin: 10px 0 6px; font-weight: 500; }
+    input, select, textarea, button {
+      font-family: inherit;
+      font-size: 14px;
+      padding: 8px 10px;
+      margin-top: 4px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark input, body.dark select, body.dark textarea {
+      background: #353b48;
+      color: var(--text-color);
+      border: 1px solid #555;
+    }
+    textarea { resize: vertical; }
+    button {
+      background: var(--button-bg);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    button:hover { background: var(--button-bg-hover); }
+    button[type="button"] {
+      width: auto;
+      display: inline-block;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    #start-scan { background: var(--success-bg); }
+    #start-scan:hover { background: var(--success-bg-hover); }
+    #stop-scan { background: var(--danger-bg); }
+    #stop-scan:hover { background: var(--danger-bg-hover); }
+    #qr-reader { width: 100%; max-width: 420px; margin: 15px auto; border: 1px solid #ddd; border-radius: 6px; }
+    ul.flash { list-style: none; padding: 0; }
+    ul.flash li {
+      background: var(--flash-bg);
+      border: 1px solid var(--flash-border);
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 13px;
+      color: #777;
+    }
+    /* Toggle switch */
+    .toggle-container {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input { display: none; }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 26px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px; width: 20px;
+      left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    } 
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #3498db;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .back-btn:hover {
+      background-color: #2980b9;
+      transform: scale(1.05);
+    }
+    body.dark .back-btn {
+      background-color: #0984e3;
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <a href="{{ url_for('login') }}" class="back-btn" onclick="return confirm('Are you sure you want to Logout?')">⬅ Logout</a>
+    <h1>RSA + QR Hybrid Encryptor</h1>
+    <p>Secure file encryption & decryption with QR-based key sharing</p>
+    <div class="toggle-container">
+      <label class="switch">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h3>1) Generate RSA Keypair</h3>
+      <form action="{{ url_for('route_generate_keys') }}" method="post">
+        <label>Key size (bits):</label>
+        <select name="bits">
+          <option value="2048">2048 (default)</option>
+          <option value="3072">3072</option>
+          <option value="4096">4096</option>
+        </select>
+        <button type="submit">Generate keys</button>
+      </form>
+      <small>Keys are stored in <code>keys/</code>. For safety, prefer generating private keys locally.</small>
+    </section>
+
+    <section>
+      <h3>2.5) Sign File</h3>
+      <form action="{{ url_for('route_sign') }}" method="post" enctype="multipart/form-data">
+        <label>Upload file to sign:</label>
+        <input type="file" name="file" required>
+
+        <label>Upload private key (PEM) to use for signing (optional):</label>
+        <input type="file" name="private_file">
+
+        <label>Select private key from server (optional):</label>
+        <select name="private_key_select">
+          <option value="">-- none --</option>
+          {% for p in priv_keys %}
+          <option value="{{ p }}">{{ p }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit">Sign File</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>2) Encrypt File</h3>
+      <form action="{{ url_for('route_encrypt') }}" method="post" enctype="multipart/form-data">
+        <label>Upload file to encrypt:</label>
+        <input type="file" name="file" required>
+
+        <label>Or upload public key (PEM):</label>
+        <input type="file" name="public_file">
+
+        <label>Select existing public key on server:</label>
+        <select name="public_key_select">
+          <option value="">-- none --</option>
+          {% for pk in pub_keys %}
+          <option value="{{ pk }}">{{ pk }}</option>
+          {% endfor %}
+        </select>
+
+        <button type="submit">Encrypt & Generate QR</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>3) Decrypt File</h3>
+      <form action="{{ url_for('route_decrypt') }}" method="post" enctype="multipart/form-data">
+        <label>Upload encrypted file (.encrypted):</label>
+        <input type="file" name="enc_file" required>
+
+        <label>Upload private key (PEM):</label>
+        <input type="file" name="private_file">
+        <small>Will NOT be saved to server.</small>
+
+        <label>Select private key from server (if previously generated):</label>
+        <select name="private_key_select">
+          <option value="">-- none --</option>
+          {% for p in priv_keys %}
+          <option value="{{ p }}">{{ p }}</option>
+          {% endfor %}
+        </select>
+
+        <label>Paste QR payload (base64):</label>
+        <textarea id="qr_payload" name="qr_payload" rows="3" placeholder="Paste base64 QR payload here"></textarea>
+
+        <div>
+          <button type="button" id="start-scan">Scan QR with Camera</button>
+          <button type="button" id="stop-scan" style="display:none">Stop Scanner</button>
+        </div>
+        <div id="qr-reader"></div>
+
+        <button type="submit">Decrypt</button>
+      </form>
+    </section>
+        <ul class="flash">
+          <li></li>
+        </ul>
+
+    <footer>
+      Outputs (encrypted files, QR images, decrypted files) are saved in <code>outputs/</code>.  
+      Use download links from the Result page after operations.
+    </footer>
+  </main>
+
+  <!-- include html5-qrcode via CDN -->
+  <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.body;
+
+    // restore from localStorage
+    if (localStorage.getItem("theme") === "dark") {
+      body.classList.add("dark");
+      themeToggle.checked = true;
+    }
+
+    themeToggle.addEventListener("change", () => {
+      if (themeToggle.checked) {
+        body.classList.add("dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        body.classList.remove("dark");
+        localStorage.setItem("theme", "light");
+      }
+    });
+
+    // QR scanner
+    const startBtn = document.getElementById("start-scan");
+    const stopBtn = document.getElementById("stop-scan");
+    const qrPayloadArea = document.getElementById("qr_payload");
+    let html5QrcodeScanner = null;
+
+    startBtn.addEventListener("click", () => {
+      html5QrcodeScanner = new Html5Qrcode("qr-reader");
+      Html5Qrcode.getCameras().then(cameras => {
+        if (cameras && cameras.length) {
+          const cameraId = cameras[0].id;
+          html5QrcodeScanner.start(
+            cameraId,
+            { fps: 10, qrbox: 250 },
+            decodedText => {
+              qrPayloadArea.value = decodedText;
+              html5QrcodeScanner.stop().then(() => {
+                startBtn.style.display = "inline-block";
+                stopBtn.style.display = "none";
+              });
+            }
+          ).then(() => {
+            startBtn.style.display = "none";
+            stopBtn.style.display = "inline-block";
+          }).catch(err => alert("Unable to start camera: " + err));
+        } else {
+          alert("No cameras found.");
+        }
+      }).catch(err => alert("Camera access error: " + err));
+    });
+
+    stopBtn.addEventListener("click", () => {
+      if (html5QrcodeScanner) {
+        html5QrcodeScanner.stop().then(() => {
+          html5QrcodeScanner.clear();
+          startBtn.style.display = "inline-block";
+          stopBtn.style.display = "none";
+        });
+      }
+    });
+  </script>
+</body>
+</html>

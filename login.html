@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Secure Login | QR Encryptor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #e0e0e0;
+      background:
+        radial-gradient(circle at top left, rgba(10, 25, 47, 0.85), rgba(1, 9, 21, 0.95)),
+        url("{{ url_for('static', filename='codes_background.jpg') }}") center/cover no-repeat fixed;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+    }
+
+    header {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      padding: 5px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+    }
+
+    header h2 {
+      font-size: 1em;
+      font-weight: 400;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 30px;
+      top: 90px;
+      background: linear-gradient(135deg, #48c6ef, #6f86d6);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .back-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #5bb4ef, #7c92e1);
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 45px 50px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 25px rgba(80, 120, 255, 0.3);
+      width: 340px;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 0.5em;
+      background: linear-gradient(90deg, #48c6ef, #6f86d6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      font-weight: 500;
+      font-size: 0.95em;
+      color: #f5f6fa;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 1em;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 8px rgba(72,198,239,0.6);
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #48c6ef, #6f86d6);
+      color: white;
+      font-weight: 600;
+      font-size: 1.05em;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(111,134,214,0.4);
+    }
+
+    button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(111,134,214,0.6);
+    }
+
+    button:active {
+      transform: scale(0.96);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .flash {
+      display: none;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 0.85em;
+      opacity: 0.8;
+      color: #9aa0a6;
+      animation: fadeIn 2s ease-in-out;
+      text-align: center;
+      width: 100%;
+    }
+
+    @media (max-width: 600px) {
+      .login-card { width: 90%; padding: 35px 25px; }
+      h1 { font-size: 1.8em; }
+      .back-btn { left: 15px; top: 70px; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ url_for('static', filename='logo_unib.png') }}" alt="Logo UNIB">
+    <h2>Universitas Bengkulu</h2>
+  </header>
+
+  <a href="{{ url_for('home') }}" class="back-btn" onclick="return confirm('Are you sure you want to go back?')">⬅ Back</a>
+
+  <div class="login-card">
+    <h1>Secure Login</h1>
+    <form method="post">
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Enter your username" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter your password" required>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="flash">
+            <script>
+              setTimeout(() => {
+                alert("⚠️ Login Gagal: {{ msg }}");
+              }, 500);
+            </script>
+    </div>
+  </div>
+
+  <footer>© 2025 Secure Encryption System | Developed by Ammar Siraj Ananda, Muhammad Fadli Rahmansyah, Sallaa Fikriyatul Arifah</footer>
+</body>
+</html>
