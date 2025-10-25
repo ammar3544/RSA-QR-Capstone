@@ -2,11 +2,6 @@
 
 # 🧠 RSA QR Capstone (Full Local Version)
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-Framework-lightgrey?logo=flask)](https://flask.palletsprojects.com/)
-[![Render](https://img.shields.io/badge/Deploy-Render-brightgreen?logo=render)](https://render.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
 Aplikasi Flask untuk **penandatanganan dan verifikasi file digital** berbasis **RSA** dengan tambahan **QR Code**.
 Dirancang untuk penggunaan **lokal** maupun **hosting di Render**, dengan login multi-role (`admin`, `client`, `mitra`) dan dashboard terpisah.
 
